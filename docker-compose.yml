@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  sq-php:
+    container_name: sq-php
+    build:
+      context: .docker/php
+      dockerfile: Dockerfile
+    volumes:
+      - sq-composer:/root/.composer/:rw
+      - ./:/var/www/:rw
+    working_dir: /var/www/
+
+volumes:
+  sq-composer:
+    external:
+      name: sq-composer
