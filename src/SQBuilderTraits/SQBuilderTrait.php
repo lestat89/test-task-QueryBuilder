@@ -76,7 +76,7 @@ trait SQBuilderTrait
     /**
      * @return string
      */
-    public function groupByBuilld(): string
+    public function groupByBuild(): string
     {
         if (!$this->isGroupBy()) {
             return '';

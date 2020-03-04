@@ -32,7 +32,7 @@ class GroupByTest extends TestCase
      */
     public function testGroupByFields(string $expected, $groupBy, SimpleQuery $simpleQuery): void
     {
-        $this->assertEquals($expected, $simpleQuery->groupBy($groupBy)->groupByBuilld());
+        $this->assertEquals($expected, $simpleQuery->groupBy($groupBy)->groupByBuild());
     }
 
     /**
