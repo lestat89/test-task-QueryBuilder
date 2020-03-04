@@ -17,5 +17,6 @@
 
 Шаги без запуска docker контейнера:
 -------------
+Требуемая версия php 7.4
 1. В корне проекта выполнить ``` composer install ```
 2. Запустить unit тесты``` ./vendor/bin/phpunit --testdox tests ```
