@@ -2,6 +2,8 @@
 
 namespace App\SQBuilderTraits;
 
+use LogicException;
+
 /**
  * Trait SQBuilderTrait
  * @package App\SQBuilderTraits
@@ -80,9 +82,8 @@ trait SQBuilderTrait
             return '';
         }
 
-        return 'GROUP BY ' . implode(', ', array_map(function ($value): string {
-                return $this->quote($this->escape($value));
-            }, $this->getGroupBy()));
+        return 'GROUP BY ' . implode(', ',
+                array_map(fn($value): string => $this->quote($this->escape($value)), $this->getGroupBy()));
     }
 
     /**
@@ -113,7 +114,7 @@ trait SQBuilderTrait
             if (!is_int($sort)) {
                 $sort = strtoupper($sort);
                 if (!in_array($sort, self::SORT_TYPES)) {
-                    throw new \LogicException('Sort type not found');
+                    throw new LogicException('Sort type not found');
                 }
 
                 $orders[] = $this->quote($column) . ' ' . $sort;
@@ -154,20 +155,19 @@ trait SQBuilderTrait
             if (is_string($condition)) {
                 $typeCondition = strtoupper($condition);
                 if (!in_array($typeCondition, self::WHERE_TYPE_CONDITIONS)) {
-                    throw new \LogicException('Not found type condition');
+                    throw new LogicException('Not found type condition');
                 }
                 continue;
             }
 
             if (!is_array($condition)) {
-                throw new \LogicException('Condition not array');
+                throw new LogicException('Condition not array');
             }
 
             $operator = '=';
             if (count($condition) === 3) {
                 [$operator, $field, $value] = $condition;
-            }
-            if (count($condition) === 2) {
+            } else {
                 [$field, $value] = $condition;
             }
 
@@ -177,13 +177,11 @@ trait SQBuilderTrait
             }
 
             if (!in_array($operator, self::WHERE_OPERATORS)) {
-                throw new \LogicException('Operator not found');
+                throw new LogicException('Operator not found');
             }
 
             if (is_array($value)) {
-                $value = implode(', ', array_map(function ($value): string {
-                    return sprintf('"%s"', $this->escape($value));
-                }, $value));
+                $value = implode(', ', array_map(fn($value): string => sprintf('"%s"', $this->escape($value)), $value));
             } else {
                 $value = sprintf('"%s"', $this->escape($value));
             }
